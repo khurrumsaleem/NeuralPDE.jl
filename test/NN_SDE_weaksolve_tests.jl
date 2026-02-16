@@ -108,7 +108,7 @@ end
     sol_GBM, phi = solve(
         prob,
         alg,
-        maxiters=400
+        maxiters=500
     )
 
     analytic_sol_func(x, t) = pdf(LogNormal(log(u0) + (μ - 0.5 * σ^2) * t, sqrt(t) * σ), x)
