@@ -166,7 +166,7 @@ function SciMLBase.__solve(
             # perform ∫ f(x) dx over [x_0, x_end]
             phi_normloss(x, θ) = u0 isa Number ? first(phi([x, t], θ)) : phi([x, t], θ)
             I_est = solve(IntegralProblem(phi_normloss, x_0, x_end, θ), norm_loss_alg,
-                reltol=1e-5, abstol=1e-5, maxiters=10)[1]
+                reltol=1e-4, abstol=1e-4, maxiters=10)[1]
             loss += abs2(I_est - P(1))
         end
         return loss

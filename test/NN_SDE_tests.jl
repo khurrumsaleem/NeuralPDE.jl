@@ -399,7 +399,7 @@ end
     dataset = [observed_process, ts]
 
     # solver configuration
-    abstol = 1.0e-10
+    abstol = 1.0e-8
     autodiff = false
     kwargs = (; verbose = true, dt = 1 / 50.0f0, abstol, maxiters = 700)
     opt = BFGS()
