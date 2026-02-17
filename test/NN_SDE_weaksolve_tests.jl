@@ -54,7 +54,7 @@
 
     # MSE across all x
     diff = u_real .- u_predict
-    @test mean(vcat([abs2.(diff_i) for diff_i in diff]...)) < 0.01
+    @test mean(vcat([abs2.(diff_i) for diff_i in diff]...)) < 1e-2
 
     # Compare with analytic OU solution Plotting
     # using Plots
@@ -122,7 +122,7 @@ end
 
     # MSE across all x
     diff = u_real .- u_predict
-    @test mean(vcat([abs2.(diff_i) for diff_i in diff]...)) < 0.01
+    @test mean(vcat([abs2.(diff_i) for diff_i in diff]...)) < 5e-2
 
     # Compare with analytic GBM solution Plotting
     # using Plots
