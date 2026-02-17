@@ -15,10 +15,13 @@
 
     # Neural network
     inn = 20
-    chain = Lux.Chain(Dense(2, inn, Lux.tanh),
+    chain = Lux.Chain(
+        Dense(2, inn, Lux.tanh),
         Dense(inn, inn, Lux.tanh),
-        Dense(inn, 1, Lux.logcosh
-        )) |> f64
+        Dense(
+            inn, 1, Lux.logcosh
+        )
+    ) |> f64
 
     # problem setting
     dx = 0.02
@@ -27,18 +30,18 @@
     σ_var_bc = 0.05
 
     alg = SDEPINN(
-        chain=chain,
-        optimalg=BFGS(),
-        norm_loss_alg=HCubatureJL(),
-        x_0=x_0,
-        x_end=x_end,
-        distrib=Normal(u0, σ_var_bc)
+        chain = chain,
+        optimalg = BFGS(),
+        norm_loss_alg = HCubatureJL(),
+        x_0 = x_0,
+        x_end = x_end,
+        distrib = Normal(u0, σ_var_bc)
     )
 
     sol_OU, phi = solve(
         prob,
         alg,
-        maxiters=300
+        maxiters = 300
     )
 
     # OU analytic solution
@@ -54,7 +57,7 @@
 
     # MSE across all x
     diff = u_real .- u_predict
-    @test mean(vcat([abs2.(diff_i) for diff_i in diff]...)) < 1e-2
+    @test mean(vcat([abs2.(diff_i) for diff_i in diff]...)) < 1.0e-2
 
     # Compare with analytic OU solution Plotting
     # using Plots
@@ -83,10 +86,13 @@ end
 
     # Neural network
     inn = 20
-    chain = Lux.Chain(Dense(2, inn, Lux.tanh),
+    chain = Lux.Chain(
+        Dense(2, inn, Lux.tanh),
         Dense(inn, inn, Lux.tanh),
-        Dense(inn, 1, Lux.logcosh
-        )) |> f64
+        Dense(
+            inn, 1, Lux.logcosh
+        )
+    ) |> f64
 
     # problem setting - (results depend on x's assumed range)
     dx = 0.01
@@ -94,21 +100,21 @@ end
     x_end = 3.0
     σ_var_bc = 0.05
     alg = SDEPINN(
-        chain=chain,
-        optimalg=BFGS(),
-        norm_loss_alg=HCubatureJL(),
-        x_0=x_0,
-        x_end=x_end,
+        chain = chain,
+        optimalg = BFGS(),
+        norm_loss_alg = HCubatureJL(),
+        x_0 = x_0,
+        x_end = x_end,
 
         # pdf(LogNormal(log(X₀), σ_var_bc), x)  # initial PDF
         # for gbm normal X0 disti also gives good results with absorbing_bc.
-        distrib=LogNormal(log(u0), σ_var_bc)
+        distrib = LogNormal(log(u0), σ_var_bc)
     )
 
     sol_GBM, phi = solve(
         prob,
         alg,
-        maxiters=500
+        maxiters = 400
     )
 
     analytic_sol_func(x, t) = pdf(LogNormal(log(u0) + (μ - 0.5 * σ^2) * t, sqrt(t) * σ), x)
@@ -122,7 +128,7 @@ end
 
     # MSE across all x
     diff = u_real .- u_predict
-    @test mean(vcat([abs2.(diff_i) for diff_i in diff]...)) < 5e-2
+    @test mean(vcat([abs2.(diff_i) for diff_i in diff]...)) < 5.0e-2
 
     # Compare with analytic GBM solution Plotting
     # using Plots
