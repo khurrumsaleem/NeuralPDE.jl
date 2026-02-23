@@ -398,10 +398,11 @@ end
     observed_process = [analytic_solution_samples[:, i] for i in 1:num_samples]
     dataset = [observed_process, ts]
 
+    N_solve = 20
     # solver configuration
     abstol = 1.0e-12
     autodiff = false
-    kwargs = (; verbose = true, dt = 1 / 50.0f0, abstol, maxiters = 700)
+    kwargs = (; verbose = true, dt = 1 / N_solve, abstol, maxiters = 700)
     opt = BFGS()
     numensemble = 100
 
@@ -440,7 +441,7 @@ end
     for i in 1:num_samples
         W = WienerProcess(0.0, 0.0)
         probtemp = NoiseProblem(W, (0.0, 1.0))
-        Np_sol = solve(probtemp; dt = kwargs.dt)
+        Np_sol = solve(probtemp; dt = 1 / (N_solve - 1))
         W_samples[:, i] = Np_sol.u
     end
 
