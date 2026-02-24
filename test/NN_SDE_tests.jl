@@ -398,13 +398,13 @@
     observed_process = [analytic_solution_samples[:, i] for i in 1:num_samples]
     dataset = [observed_process, ts]
 
-    N_solve = 20
+    N_solve = 50
     # solver configuration
-    abstol = 1.0e-10
+    abstol = 1.0e-12
     autodiff = false
     kwargs = (; verbose = true, dt = 1 / N_solve, abstol, maxiters = 500)
     opt = BFGS()
-    numensemble = 100
+    numensemble = 200
 
     # for inverse problems more sub_batch leads to learning mainly the drift parameter
     alg_1 = NNSDE(
@@ -415,8 +415,8 @@
         luxchain, opt; autodiff, numensemble = numensemble,
         sub_batch = 1, batch = true, param_estim = true, strong_loss = false, dataset = dataset
     )
-    sol_1 = solve(prob, alg_1; kwargs...)
     sol_2 = solve(prob, alg_2; kwargs...)
+    sol_1 = solve(prob, alg_1; kwargs...)
 
     # sol_1, sol_2 have the same timespan and are single output
     ts = sol_1.timepoints
@@ -435,7 +435,7 @@
     end
 
     # testing dataset must be for the same timepoints as solution
-    num_samples = 100
+    num_samples = 500
     num_time_steps = length(ts)
     W_samples = Array{Float64}(undef, num_time_steps, num_samples)
     for i in 1:num_samples
@@ -480,9 +480,9 @@
     # testing over different, same Z_i sample sizes
     # relaxed tolerances for Julia pre and v1 in the below tests.
     # All the below Tests pass for lts-Julia v1.10.10 with tolerances as < 5e-2.
-    @test mean(abs2.(mean_analytic_solution .- pmean(u2))) < 0.1
-    @test mean(abs2.(mean_analytic_solution .- mean_predicted_solution_2)) < 0.1
-    @test mean(abs2.(mean_predicted_solution_2 .- mean_truncated_solution)) < 0.1
+    @test mean(abs2.(mean_analytic_solution .- pmean(u2))) < 5.0e-2
+    @test mean(abs2.(mean_analytic_solution .- mean_predicted_solution_2)) < 5.0e-2
+    @test mean(abs2.(mean_predicted_solution_2 .- mean_truncated_solution)) < 5.0e-2
 
     # strong solution tests (sol_1)
     # get SDEPINN output at fixed path we solved over.
@@ -505,7 +505,7 @@
             for i in eachindex(ts)
     ]
 
-    @test mean(abs2, solution_1_strong_solve .- truncated_solution_strong_paths) < 5.0e-2
+    @test mean(abs2, solution_1_strong_solve .- truncated_solution_strong_paths) < 3.0e-2
 
     # estimated sde parameter tests (we trained with 15 observed solution paths).
     # absolute value taken for 2nd estimated parameter as loss for variance is independent of this parameter's direction.
