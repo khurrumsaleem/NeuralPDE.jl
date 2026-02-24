@@ -400,9 +400,9 @@
 
     N_solve = 20
     # solver configuration
-    abstol = 1.0e-12
+    abstol = 1.0e-10
     autodiff = false
-    kwargs = (; verbose = true, dt = 1 / N_solve, abstol, maxiters = 700)
+    kwargs = (; verbose = true, dt = 1 / N_solve, abstol, maxiters = 500)
     opt = BFGS()
     numensemble = 100
 
