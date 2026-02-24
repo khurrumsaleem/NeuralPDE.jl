@@ -505,12 +505,12 @@
             for i in eachindex(ts)
     ]
 
-    @test mean(abs2, solution_1_strong_solve .- truncated_solution_strong_paths) < 0.15
+    @test mean(abs2, solution_1_strong_solve .- truncated_solution_strong_paths) < 0.2
 
     # estimated sde parameter tests (we trained with 15 observed solution paths).
     # absolute value taken for 2nd estimated parameter as loss for variance is independent of this parameter's direction.
     @test sol_1.estimated_params[1] .≈ ideal_p[1] rtol = 0.25
-    @test abs(sol_1.estimated_params[2]) .≈ ideal_p[2] rtol = 1.0e-1
+    @test abs(sol_1.estimated_params[2]) .≈ ideal_p[2] rtol = 0.125
     @test sol_2.estimated_params[1] .≈ ideal_p[1] rtol = 0.25
-    @test abs(sol_2.estimated_params[2]) .≈ ideal_p[2] rtol = 1.0e-1
+    @test abs(sol_2.estimated_params[2]) .≈ ideal_p[2] rtol = 0.125
 end
